@@ -7,7 +7,7 @@ bin-release/
 # Other files and folders
 .settings/
 Utils/__pycache__/
-Model/BackBone/__pycache__/
+Models/BackBone/__pycache__/
 
 # Executables
 *.swf
