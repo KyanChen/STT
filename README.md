@@ -1,11 +1,11 @@
 # STTNet
 Building Extraction from Remote Sensing Images with Sparse Token Transformers
 1. Prepare Data     
-Prepare data for training, validation, and test phase. All images are with the resolution of $512 \times 512$. Please refer to the directory of *Data*.
+Prepare data for training, validation, and test phase. All images are with the resolution of ![](http://latex.codecogs.com/gif.latex?512 \times 512). Please refer to the directory of **Data**.
 2. Get Data List    
-Please refer to *Tools/GetTrainValTestCSV.py* to get the train, val, and test csv files.
+Please refer to **Tools/GetTrainValTestCSV.py** to get the train, val, and test csv files.
 3. Get Imgs Infos     
-Please refer to *Tools/GetImgMeanStd.py* to get the mean value and 
+Please refer to **Tools/GetImgMeanStd.py** to get the mean value and 
 standard deviation of the all image pixels in training set.
 4. Modify Model Infos    
 Please modify the model information if you want.
