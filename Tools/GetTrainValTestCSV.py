@@ -83,7 +83,7 @@ class GetTrainTestCSV:
     def _get_file(self, in_path_list):
         file_list = []
         for file in in_path_list:
-            if os.path.isdir(file):
+            if os.path.isdir(os.path.abspath(file)):
                 files = glob.glob(file + '/*')
                 file_list.extend(self._get_file(files))
             else:
@@ -117,9 +117,9 @@ class GetTrainTestCSV:
 
 if __name__ == '__main__':
     data_path_list = [
-        r'L:\Code\ProjectOnGithub\STT\Data\test_samples\img'
+        'D:/Code/ProjectOnGithub/STT/Data/val_samples/img'
                       ]
-    csv_name = 'test_data.csv'
+    csv_name = 'val_data.csv'
     img_format_list = ['png']
 
     getTrainTestCSV = GetTrainTestCSV(dataset_path_list=data_path_list, csv_name=csv_name, img_format_list=img_format_list)

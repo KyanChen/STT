@@ -603,3 +603,4 @@ class Augmentations(object):
 
     def __call__(self, data):
         return self.augment(data)
+

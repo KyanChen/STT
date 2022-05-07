@@ -1,3 +1,5 @@
+import os.path
+
 from torch.utils.data import Dataset, DataLoader
 import torch
 import numpy as np
@@ -39,7 +41,8 @@ class Datasets(Dataset):
         one_hot_label[1] = label > 0
         return_dict = {
             'img': torch.from_numpy(img).permute(2, 0, 1),
-            'label': torch.from_numpy(one_hot_label)
+            'label': torch.from_numpy(one_hot_label),
+            'img_name': os.path.basename(img_name)
         }
         return return_dict
 
@@ -129,7 +132,7 @@ def collate_fn(batch):
         for key, value in sample.items():
             return_data[key].append(to_tensor(value))
 
-    keys = set(batch[0].keys())
+    keys = set(batch[0].keys()) - {'img_name'}
     for key in keys:
         return_data[key] = torch.stack(return_data[key], dim=0)
 

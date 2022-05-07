@@ -19,7 +19,8 @@ __all__ = ["decode_mask_to_onehot",
            'draw_bboxes',
            'Infos',
            'inv_normalize_img',
-           'make_numpy_img'
+           'make_numpy_img',
+           'get_metrics'
            ]
 
 
