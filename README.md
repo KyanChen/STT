@@ -1,7 +1,7 @@
 # STTNet
 Paper: Building Extraction from Remote Sensing Images with Sparse Token Transformers
 1. Prepare Data     
-   Prepare data for training, validation, and test phase. All images are with the resolution of $512 \times 512$. Please refer to the directory of **Data**.
+   Prepare data for training, validation, and test phase. All images are with the resolution of <img src="https://latex.codecogs.com/png.image?\dpi{110}&space;512\times&space;512" title="512\times 512" />. Please refer to the directory of **Data**.
   
    For larger images, you can patch the images with labels using **Tools/CutImgSegWithLabel.py**.
 3. Get Data List    
