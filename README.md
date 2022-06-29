@@ -12,7 +12,7 @@ Paper: Building Extraction from Remote Sensing Images with Sparse Token Transfor
    Please modify the model information if you want, or keep the default configuration.
 5. Run to Train    
    Train the model in **Main.py**.
-6. [Optional] Run to Test
+6. [Optional] Run to Test    
    Test the model with checkpoint in **Test.py**.
 
 
