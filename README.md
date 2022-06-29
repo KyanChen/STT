@@ -4,14 +4,16 @@ Paper: Building Extraction from Remote Sensing Images with Sparse Token Transfor
    Prepare data for training, validation, and test phase. All images are with the resolution of $512 \times 512$. Please refer to the directory of **Data**.
   
    For larger images, you can patch the images with labels using **Tools/CutImgSegWithLabel.py**.
-3. Get Data List    
+2. Get Data List    
    Please refer to **Tools/GetTrainValTestCSV.py** to get the train, val, and test csv files.
-4. Get Imgs Infos     
+3. Get Imgs Infos     
    Please refer to **Tools/GetImgMeanStd.py** to get the mean value and standard deviation of the all image pixels in training set.
-5. Modify Model Infos    
+4. Modify Model Infos    
    Please modify the model information if you want, or keep the default configuration.
-6. Run to Train    
+5. Run to Train    
    Train the model in **Main.py**.
+6. [Optional] Run to Test
+   Test the model with checkpoint in **Test.py**.
 
 
 If you have any questions, please refer to [our paper](https://www.mdpi.com/2072-4292/13/21/4441) or contact with us by email.
