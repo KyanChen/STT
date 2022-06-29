@@ -1,0 +1,8 @@
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+Use GPUs: 1
+val: Iou:0.8756 OA:0.9613 F1:0.9337
+test: Iou:0.8756 OA:0.9613 F1:0.9337
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+Use GPUs: 1
+val: Iou:0.8756 OA:0.9613 F1:0.9337
+test: Iou:0.8756 OA:0.9613 F1:0.9337

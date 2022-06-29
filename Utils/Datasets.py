@@ -47,25 +47,28 @@ class Datasets(Dataset):
         return return_dict
 
 
-def get_data_loader(config):
-    train_params = {
-        'batch_size': config['BATCH_SIZE'],
-        'shuffle': config['IS_SHUFFLE'],
-        'drop_last': False,
-        'collate_fn': collate_fn,
-        'num_workers': config['NUM_WORKERS'],
-        'pin_memory': False
-    }
-    #  data_file, config, transform=None
-    train_set = Datasets(
-        config['DATASET'],
-        Augmentations(
-            config['IMG_SIZE'], config['PRIOR_MEAN'], config['PRIOR_STD'], 'train', config['PHASE'], config
-        ),
-        config['PHASE'],
-        config
-    )
-    patterns = ['train']
+def get_data_loader(config, test_mode=False):
+    if not test_mode:
+        train_params = {
+            'batch_size': config['BATCH_SIZE'],
+            'shuffle': config['IS_SHUFFLE'],
+            'drop_last': False,
+            'collate_fn': collate_fn,
+            'num_workers': config['NUM_WORKERS'],
+            'pin_memory': False
+        }
+        #  data_file, config, transform=None
+        train_set = Datasets(
+            config['DATASET'],
+            Augmentations(
+                config['IMG_SIZE'], config['PRIOR_MEAN'], config['PRIOR_STD'], 'train', config['PHASE'], config
+            ),
+            config['PHASE'],
+            config
+        )
+        patterns = ['train']
+    else:
+        patterns = []
 
     if config['IS_VAL']:
         val_params = {

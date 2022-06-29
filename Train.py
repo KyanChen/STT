@@ -1,12 +1,15 @@
+import os
+# Change the numbers when you want to train with specific gpus
+# os.environ['CUDA_VISIBLE_DEVICES'] = '0, 1, 2, 3'
 import torch
 from STTNet import STTNet
 import torch.nn.functional as F
 from Utils.Datasets import get_data_loader
-from Utils.Utils import make_numpy_img, inv_normalize_img, encode_onehot_to_mask, get_metrics
-import os
+from Utils.Utils import make_numpy_img, inv_normalize_img, encode_onehot_to_mask, get_metrics, Logger
 import matplotlib.pyplot as plt
 import numpy as np
-
+from collections import OrderedDict
+from torch.optim.lr_scheduler import MultiStepLR
 
 if __name__ == '__main__':
     model_infos = {
@@ -37,33 +40,64 @@ if __name__ == '__main__':
         'TEST_DATASET': 'Tools/generate_dep_info/test_data.csv',
         'IMG_SIZE': [512, 512],
         'PHASE': 'seg',
-        'PRIOR_MEAN': [0.46278404739026296, 0.469763416147487, 0.44496931596235817],
-        'PRIOR_STD': [0.03600466440229604, 0.036798446555721516, 0.038701379834091894],
+
+        # INRIA Dataset
+        'PRIOR_MEAN': [0.40672500537632994, 0.42829032416229895, 0.39331840468605667],
+        'PRIOR_STD': [0.029498464618176873, 0.027740088491668233, 0.028246722411879095],
+        # # # WHU Dataset
+        # 'PRIOR_MEAN': [0.4352682576428411, 0.44523221318154493, 0.41307610541534784],
+        # 'PRIOR_STD': [0.026973196780331585, 0.026424642808887323, 0.02791246590291434],
+
         # if you want to load state dict
-        'load_checkpoint_path': 'D:/Code/ProjectOnGithub/STT/Checkpoints/ckpt_181.pt'
+        'load_checkpoint_path': r'E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt',
+        # if you want to resume a checkpoint
+        'resume_checkpoint_path': '',
+
     }
     os.makedirs(model_infos['model_path'], exist_ok=True)
     if model_infos['IS_VAL']:
         os.makedirs(model_infos['log_path']+'/val', exist_ok=True)
     if model_infos['IS_TEST']:
         os.makedirs(model_infos['log_path']+'/test', exist_ok=True)
+    logger = Logger(model_infos['log_path'] + '/log.log')
 
     data_loaders = get_data_loader(model_infos)
     loss_weight = 0.1
     model = STTNet(**model_infos)
 
     epoch_start = 0
-    if os.path.exists(model_infos['load_checkpoint_path']):
-        print(f'load checkpoint from {model_infos["load_checkpoint_path"]}')
+    if model_infos['load_checkpoint_path'] is not None and os.path.exists(model_infos['load_checkpoint_path']):
+        logger.write(f'load checkpoint from {model_infos["load_checkpoint_path"]}\n')
         state_dict = torch.load(model_infos['load_checkpoint_path'], map_location='cpu')
+        model_dict = state_dict['model_state_dict']
+        try:
+            model_dict = OrderedDict({k.replace('module.', ''): v for k, v in model_dict.items()})
+            model.load_state_dict(model_dict)
+        except Exception as e:
+            model.load_state_dict(model_dict)
+    if model_infos['resume_checkpoint_path'] is not None and os.path.exists(model_infos['resume_checkpoint_path']):
+        logger.write(f'resume checkpoint path from {model_infos["resume_checkpoint_path"]}\n')
+        state_dict = torch.load(model_infos['resume_checkpoint_path'], map_location='cpu')
         epoch_start = state_dict['epoch_id']
         model_dict = state_dict['model_state_dict']
-        model.load_state_dict(model_dict)
-
+        logger.write(f'resume checkpoint from epoch {epoch_start}\n')
+        try:
+            model_dict = OrderedDict({k.replace('module.', ''): v for k, v in model_dict.items()})
+            model.load_state_dict(model_dict)
+        except Exception as e:
+            model.load_state_dict(model_dict)
     model = model.cuda()
+    device_ids = range(torch.cuda.device_count())
+    if len(device_ids) > 1:
+        model = torch.nn.DataParallel(model, device_ids=device_ids)
+        logger.write(f'Use GPUs: {device_ids}\n')
+    else:
+        logger.write(f'Use GPUs: 1\n')
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    max_epoch = 300
+    scheduler = MultiStepLR(optimizer, [int(max_epoch*2/3), int(max_epoch*5/6)], 0.5)
 
-    for epoch_id in range(epoch_start, 200):
+    for epoch_id in range(epoch_start, max_epoch):
         pattern = 'train'
         model.train()  # Set model to training mode
         for batch_id, batch in enumerate(data_loaders[pattern]):
@@ -84,9 +118,11 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
 
-            if batch_id % 3 == 1:
-                print(f'{pattern}: {epoch_id}/200 {batch_id}/{len(data_loaders[pattern])} loss: {loss.item():.4f}')
+            if batch_id % 20 == 1:
+                logger.write(
+                    f'{pattern}: {epoch_id}/{max_epoch} {batch_id}/{len(data_loaders[pattern])} loss: {loss.item():.4f}\n')
 
+        scheduler.step()
         patterns = ['val', 'test']
         for pattern_id, is_pattern in enumerate([model_infos['IS_VAL'], model_infos['IS_TEST']]):
             if is_pattern:
@@ -136,7 +172,7 @@ if __name__ == '__main__':
                 collect_result['pred'] = torch.cat(collect_result['pred'], dim=0)
                 collect_result['target'] = torch.cat(collect_result['target'], dim=0)
                 IoU, OA, F1_score = get_metrics('seg', **collect_result)
-                print(f'{pattern}: {epoch_id}/200 Iou:{IoU[-1]:.4f} OA:{OA[-1]:.4f} F1:{F1_score[-1]:.4f}')
+                logger.write(f'{pattern}: {epoch_id}/{max_epoch} Iou:{IoU[-1]:.4f} OA:{OA[-1]:.4f} F1:{F1_score[-1]:.4f}\n')
         if epoch_id % 20 == 1:
             torch.save({
                 'epoch_id': epoch_id,
