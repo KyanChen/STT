@@ -15,6 +15,9 @@ Paper: Building Extraction from Remote Sensing Images with Sparse Token Transfor
 6. [Optional] Run to Test    
    Test the model with checkpoint in **Test.py**.
 
+!!! We have provided pretrained models on INRIA and WHU Datasets. The pt models are in folder [Pretrain](https://huggingface.co/KyanChen/BuildingExtraction/tree/main/Pretrain).
+
+!!! You can try our demo at [HuggingFace](https://huggingface.co/spaces/KyanChen/BuildingExtraction)
 
 If you have any questions, please refer to [our paper](https://www.mdpi.com/2072-4292/13/21/4441) or contact with us by email.
 
