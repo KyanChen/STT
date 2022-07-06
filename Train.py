@@ -38,7 +38,7 @@ if __name__ == '__main__':
         # if you need the test process.
         'IS_TEST': True,
         'TEST_DATASET': 'Tools/generate_dep_info/test_data.csv',
-        'IMG_SIZE': [512, 512],
+        'IMG_SIZE': [256, 256],
         'PHASE': 'seg',
 
         # INRIA Dataset
@@ -49,7 +49,8 @@ if __name__ == '__main__':
         # 'PRIOR_STD': [0.026973196780331585, 0.026424642808887323, 0.02791246590291434],
 
         # if you want to load state dict
-        'load_checkpoint_path': r'E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt',
+        'load_checkpoint_path': '',
+        # 'load_checkpoint_path': r'E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt',
         # if you want to resume a checkpoint
         'resume_checkpoint_path': '',
 
@@ -72,9 +73,9 @@ if __name__ == '__main__':
         model_dict = state_dict['model_state_dict']
         try:
             model_dict = OrderedDict({k.replace('module.', ''): v for k, v in model_dict.items()})
-            model.load_state_dict(model_dict)
+            model.load_state_dict(model_dict, strict=False)
         except Exception as e:
-            model.load_state_dict(model_dict)
+            model.load_state_dict(model_dict, strict=False)
     if model_infos['resume_checkpoint_path'] is not None and os.path.exists(model_infos['resume_checkpoint_path']):
         logger.write(f'resume checkpoint path from {model_infos["resume_checkpoint_path"]}\n')
         state_dict = torch.load(model_infos['resume_checkpoint_path'], map_location='cpu')

@@ -73,7 +73,7 @@ class STTNet(nn.Module):
         super(STTNet, self).__init__()
         self.in_channel = in_channel
         self.n_classes = n_classes
-
+        self.img_size = kwargs['IMG_SIZE']
         # kwargs['backbone'] = res18, res50 or vgg16
         self.res_backbone = get_backbone(
             model_name=kwargs['backbone'], num_classes=None, **kwargs
@@ -96,7 +96,10 @@ class STTNet(nn.Module):
             self.reduce_dim_in = 512
             self.reduce_dim_out = 512 // 8
 
-        self.f_map_size = 32
+        if self.last_block == 'block5':
+            self.f_map_size = self.img_size[0] // 32
+        elif self.last_block == 'block4':
+            self.f_map_size = self.img_size[0] // 16
 
         # kwargs['top_k_s'] = 64
         self.top_k_s = kwargs['top_k_s']

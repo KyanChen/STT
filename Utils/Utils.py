@@ -617,3 +617,68 @@ def get_metrics(phase, pred, target):
         F1_score = 2 * precision * recall / (precision + recall + 1e-15)
         return IoU, OA, F1_score
 
+def show_feature(f_tensor, img, label, is_normalize=False, is_channel=False):
+    # 1 H W
+    if not is_normalize:
+        # normalize the features / feature maps
+        f_tensor = torch.sigmoid(f_tensor)
+    f_tensor = f_tensor.detach().cpu().numpy()
+
+    # f_tensor = np.resize(f_tensor, [1, 16])
+
+    # for better visualization, you can normalize the feature heatmap
+    f_tensor = 0.8 * (f_tensor - np.min(f_tensor)) / (np.max(f_tensor) - np.min(f_tensor)) + 0.1
+    # f_tensor = (f_tensor - np.min(f_tensor)) / (np.max(f_tensor) - np.min(f_tensor))
+
+    # show the img and its segmentation label
+    if img is not None and label is not None:
+        # img = img.astype(np.uint8)
+        # img = cv2.resize(img, f_tensor.shape)
+
+        label = label.astype(np.uint8)
+        # label = cv2.resize(label, f_tensor.shape, interpolation=cv2.INTER_NEAREST)
+        plt.figure()
+        plt.axis('off')
+        plt.imshow(img)
+        plt.figure()
+        plt.axis('off')
+        plt.imshow(label, cmap='gray')
+
+    # if show the channel-wise activation feature heatmaps
+    if is_channel:
+        from matplotlib.pyplot import MultipleLocator
+        import seaborn as sns
+        # plt.figure(figsize=(64, 1))
+        plt.figure()
+        f_tensor = f_tensor.reshape(-1)
+        x = np.array(range(0, len(f_tensor)))
+        # sns.barplot(x=2, y=4, color="salmon")
+        palette = []
+        t = np.array(sns.color_palette("YlGnBu"))
+        # t = np.array(sns.diverging_palette(250, 30, l=65, center="dark", n=200))
+        # t = np.array(sns.cubehelix_palette(200, start=1, rot=10, gamma=0.4,  hue=1, dark=0.3, light=0.7))
+        for i in range(len(f_tensor)):
+            index = int(np.floor(f_tensor[i] / 0.2))
+            color = (f_tensor[i] - index*0.2) / 0.2 * (t[index+1]-t[index]) + t[index]
+            # color = t[int(f_tensor[i]*200)]
+            palette.append(color)
+
+        sns.barplot(x=x, y=f_tensor, palette=palette)
+        plt.xlabel("Channel", fontsize=22)
+        plt.ylabel("Prob", fontsize=22)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
+        plt.xticks(x, x, rotation=0)
+        x_major_locator = MultipleLocator(4)
+        ax = plt.gca()
+        # ax.spines['top'].set_visible(False)  # 去掉上边框
+        # ax.spines['right'].set_visible(False)  # 去掉右边框
+        ax.xaxis.set_major_locator(x_major_locator)
+
+        plt.show()
+    else:
+        plt.figure()
+    plt.axis('off')
+    sns.heatmap(f_tensor, vmin=0, vmax=1, cmap="jet", center=0.5)
+    # plt.imshow(heatmap, cmap='YlGnBu', vmin=0, vmax=1)
+

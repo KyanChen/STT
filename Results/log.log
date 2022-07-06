@@ -6,3 +6,22 @@ load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
 Use GPUs: 1
 val: Iou:0.8756 OA:0.9613 F1:0.9337
 test: Iou:0.8756 OA:0.9613 F1:0.9337
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+Use GPUs: 1
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+Use GPUs: 1
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+load checkpoint from E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt
+Use GPUs: 1
+Use GPUs: 1
+train: 0/300 1/2 loss: 0.7789
+val: 0/300 Iou:0.2993 OA:0.2993 F1:0.4607
+test: 0/300 Iou:0.2993 OA:0.2993 F1:0.4607
+train: 1/300 1/2 loss: 0.8204
+val: 1/300 Iou:0.2993 OA:0.2993 F1:0.4607
+test: 1/300 Iou:0.2993 OA:0.2993 F1:0.4607
+train: 2/300 1/2 loss: 0.7947
+val: 2/300 Iou:0.2993 OA:0.2994 F1:0.4607
+test: 2/300 Iou:0.2993 OA:0.2994 F1:0.4607
+train: 3/300 1/2 loss: 0.7845
+val: 3/300 Iou:0.2968 OA:0.3228 F1:0.4577
