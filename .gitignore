@@ -1,7 +1,8 @@
-*.pt
-
 .idea
 __pycache__
+.DS_Store
+
+*.pt
 Checkpoints
 Results
 Pretrain
