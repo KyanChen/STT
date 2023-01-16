@@ -1,1 +1,10 @@
-@misc{}
+@article{chen2021building,
+  title={Building extraction from remote sensing images with sparse token transformers},
+  author={Chen, Keyan and Zou, Zhengxia and Shi, Zhenwei},
+  journal={Remote Sensing},
+  volume={13},
+  number={21},
+  pages={4441},
+  year={2021},
+  publisher={MDPI}
+}
