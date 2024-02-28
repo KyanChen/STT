@@ -29,10 +29,10 @@ if __name__ == '__main__':
         # if you need the validation process.
         'IS_VAL': True,
         'VAL_BATCH_SIZE': 4,
-        'VAL_DATASET': 'Tools/generate_dep_info/val_data.csv',
+        'VAL_DATASET': 'generate_dep_info/val_data.csv',
         # if you need the test process.
         'IS_TEST': True,
-        'TEST_DATASET': 'Tools/generate_dep_info/test_data.csv',
+        'TEST_DATASET': 'generate_dep_info/test_data.csv',
         'IMG_SIZE': [512, 512],
         'PHASE': 'seg',
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         # 'PRIOR_STD': [0.026973196780331585, 0.026424642808887323, 0.02791246590291434],
 
         # load state dict path
-        'load_checkpoint_path': r'E:\BuildingExtractionDataset\INRIA_ckpt_latest.pt',
+        'load_checkpoint_path': 'Checkpoints/ckpt_latest.pt',
     }
     if model_infos['IS_VAL']:
         os.makedirs(model_infos['log_path']+'/val', exist_ok=True)

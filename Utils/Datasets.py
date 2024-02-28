@@ -36,7 +36,7 @@ class Datasets(Dataset):
         if self.transform is not None:
             img, label = self.transform((ori_img, ori_label))
 
-        one_hot_label = np.zeros([2] + list(label.shape), dtype=np.float)
+        one_hot_label = np.zeros([2] + list(label.shape))
         one_hot_label[0] = label == 0
         one_hot_label[1] = label > 0
         return_dict = {

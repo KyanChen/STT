@@ -45,7 +45,7 @@ class GetImgMeanStd:
 
 
 if __name__ == '__main__':
-    data_file = r'generate_dep_info/train_data.csv'
+    data_file = 'generate_dep_info/train_data.csv'
     getImgMeanStd = GetImgMeanStd(data_file)
     getImgMeanStd.write_mean_std_information()
 

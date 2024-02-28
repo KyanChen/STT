@@ -28,16 +28,16 @@ if __name__ == '__main__':
         'BATCH_SIZE': 8,
         'IS_SHUFFLE': True,
         'NUM_WORKERS': 0,
-        'DATASET': 'Tools/generate_dep_info/train_data.csv',
+        'DATASET': 'generate_dep_info/train_data.csv',
         'model_path': 'Checkpoints',
         'log_path': 'Results',
         # if you need the validation process.
         'IS_VAL': True,
         'VAL_BATCH_SIZE': 4,
-        'VAL_DATASET': 'Tools/generate_dep_info/val_data.csv',
+        'VAL_DATASET': 'generate_dep_info/val_data.csv',
         # if you need the test process.
         'IS_TEST': True,
-        'TEST_DATASET': 'Tools/generate_dep_info/test_data.csv',
+        'TEST_DATASET': 'generate_dep_info/test_data.csv',
         'IMG_SIZE': [512, 512],
         'PHASE': 'seg',
 
@@ -108,6 +108,7 @@ if __name__ == '__main__':
 
             # inference
             optimizer.zero_grad()
+            import pdb; pdb.set_trace()
             logits, att_branch_output = model(img_batch)
 
             # compute loss

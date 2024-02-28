@@ -117,9 +117,9 @@ class GetTrainTestCSV:
 
 if __name__ == '__main__':
     data_path_list = [
-        'D:/Code/ProjectOnGithub/STT/Data/val_samples/img'
+        '/mnt/home/cky/Code/STT/Data/test_samples/img'
                       ]
-    csv_name = 'val_data.csv'
+    csv_name = 'test_data.csv'
     img_format_list = ['png']
 
     getTrainTestCSV = GetTrainTestCSV(dataset_path_list=data_path_list, csv_name=csv_name, img_format_list=img_format_list)
